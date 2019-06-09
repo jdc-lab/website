@@ -24,6 +24,7 @@
 </header>
 <div id="main" class="container-fluid">
     Our personal playground for interesting things.
+    <a href="https://github.com/jdc-lab" target="_blank">Github</a>
 </div>
 <footer class="container-fluid">
     <ul>

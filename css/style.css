@@ -1,0 +1,38 @@
+body {
+}
+
+header {
+    background: lightgrey;
+    height: 64px;
+}
+
+header #header-logo {
+    width: 64px;
+    float: left;
+    text-align: center;
+}
+
+h1 {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+}
+
+#main {
+    padding: 0;
+    margin: 0;
+}
+
+footer {
+    text-align: center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    background: lightgrey;
+}
+
+footer ul {
+    list-style-type: none;
+}

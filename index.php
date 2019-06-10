@@ -8,6 +8,8 @@ $router->respond('/[:page]', function ($r) {
     render($r->page);
 });
 
+$router->dispatch();
+
 /**
  * @param string $page
  * @param array $data

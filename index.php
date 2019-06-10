@@ -8,7 +8,7 @@ $router->respond('/', function () {
     render('index');
 });
 
-$router->respond('/website/[:page]', function ($r) {
+$router->respond('/[:page]', function ($r) {
     render($r->page);
 });
 

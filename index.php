@@ -3,12 +3,13 @@
 require_once 'vendor/autoload.php';
 
 $router = new Klein\Klein();
+$uri = $_SERVER['REQUEST_URI'];
 
-$router->respond('/', function () {
+$router->respond($uri, function () {
     render('index');
 });
 
-$router->respond('/[:page]', function ($r) {
+$router->respond($uri . '[:page]', function ($r) {
     render($r->page);
 });
 

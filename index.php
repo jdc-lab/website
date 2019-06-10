@@ -28,5 +28,5 @@ function render(string $page, array $data = [])
 
     $ext = '.twig';
 
-    $twig->render($page . $ext, $data);
+    echo $twig->render($page . $ext, $data);
 }

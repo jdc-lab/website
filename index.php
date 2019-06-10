@@ -4,7 +4,11 @@ require_once 'vendor/autoload.php';
 
 $router = new Klein\Klein();
 
-$router->respond('/[:page]', function ($r) {
+$router->respond('/', function () {
+    render('index');
+});
+
+$router->respond('/website/[:page]', function ($r) {
     render($r->page);
 });
 

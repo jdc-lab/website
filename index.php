@@ -1,26 +1,53 @@
 <?php
 
 require_once 'vendor/autoload.php';
+require_once 'conf/Conf.php';
 
-$router = new Klein\Klein();
-$uri = getUri();
+use Psr\Http\Message\RequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use Slim\App;
 
-$router->respond($uri . '/', function () {
-    render('index');
+$app = new App();
+$app->add(function (Request $request, Response $response, callable $next) {
+    $uri = $request->getUri();
+    $path = $uri->getPath();
+    if ($path != '/' && substr($path, -1) == '/') {
+        // permanently redirect paths with a trailing slash
+        // to their non-trailing counterpart
+        $uri = $uri->withPath(substr($path, 0, -1));
+
+        if ($request->getMethod() == 'GET') {
+            return $response->withRedirect((string)$uri, 301);
+        } else {
+            return $next($request->withUri($uri), $response);
+        }
+    }
+
+    return $next($request, $response);
 });
 
-$router->respond($uri . '/[:page]', function ($r) {
-    render($r->page);
+
+$app->get('/', function (Request $request, Response $response, array $args) {
+    $response->getBody()->write(render('index'));
+    return $response;
 });
 
-$router->dispatch();
+$app->get('/{page}', function (Request $request, Response $response, array $args) {
+    $page = $args['page'];
+    $response->getBody()->write(render($page));
+    return $response;
+});
+
+$app->run();
 
 /**
  * @param string $page
  * @param array $data
- * @throws \Twig\Error\LoaderError
- * @throws \Twig\Error\RuntimeError
+ * @return string
+ *@throws \Twig\Error\RuntimeError
  * @throws \Twig\Error\SyntaxError
+ *
+ * @throws \Twig\Error\LoaderError
  */
 function render(string $page, array $data = [])
 {
@@ -29,18 +56,5 @@ function render(string $page, array $data = [])
 
     $ext = '.twig';
 
-    echo $twig->render($page . $ext, $data);
-}
-
-/**
- * @return string
- */
-function getUri(): string {
-    $pieces = explode('/', $_SERVER['REQUEST_URI']);
-
-    if (count($pieces) < 1) {
-        return '';
-    }
-    $uri = $pieces[1];
-    return '/' . $uri;
+    return $twig->render($page . $ext, $data);
 }
